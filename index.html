@@ -173,8 +173,7 @@ h1 {
 
 #battle-btn-container {
     display: none;
-    margin-bottom: 30px;
-    height: 60px;
+    margin-bottom: 20px;
 }
 
 .battle-btn {
@@ -189,11 +188,13 @@ h1 {
     text-transform: uppercase;
     box-shadow: 0 0 15px rgba(255, 0, 60, 0.4) inset, 0 0 15px rgba(255, 0, 60, 0.4);
     animation: battlePulse 1s infinite alternate;
+    pointer-events: auto;
+    transition: all 0.2s ease;
 }
 
 .battle-btn:hover {
     background-color: var(--main-red);
-    color: var(--bg-dark);
+    color: #010103;
     box-shadow: 0 0 30px var(--main-red) inset, 0 0 30px var(--main-red);
 }
 
@@ -272,63 +273,48 @@ h1 {
     right: 25px;
     font-size: 0.8rem;
     color: rgba(0, 243, 255, 0.2);
-    z-index: 10;
+    z-index: 50;
     pointer-events: auto;
     display: flex;
     align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    transition: color 0.3s;
 }
 
-.sys-hint::before {
-    content: '[SYS.LOG]';
-}
-
-.sys-hint:hover::before {
-    content: '';
+.sys-hint:hover {
+    color: var(--main-cyan);
 }
 
 body.error-mode {
     background-color: rgba(20, 0, 0, 0.95);
 }
 
-body.error-mode #matrix-canvas {
-    opacity: 0.4;
-}
-
+body.error-mode #matrix-canvas { opacity: 0.4; }
 body.error-mode .main-wrapper {
     animation: intenseGlitch 0.15s infinite;
     filter: drop-shadow(3px 0px 0px rgba(255,0,60,0.8)) drop-shadow(-3px 0px 0px rgba(0,243,255,0.8));
 }
-
-body.error-mode h1 {
-    color: #ffcccc;
-    text-shadow: 0 0 20px var(--main-red);
-}
+body.error-mode h1 { color: #ffcccc; text-shadow: 0 0 20px var(--main-red); }
+body.error-mode .sys-hint { display: none; }
+body.error-mode #battle-btn-container { display: block; }
 
 body.error-mode .links a {
     pointer-events: none;
-    border-color: #333;
-    color: #444;
-    text-shadow: none;
+    border-color: rgba(255, 0, 60, 0.3);
+    background-color: rgba(20, 0, 0, 0.4);
     transform: scale(1);
-    letter-spacing: 1px;
+    box-shadow: none;
 }
 
-body.error-mode .links a::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -10%;
-    width: 120%;
-    height: 14px;
-    background: repeating-linear-gradient(45deg, var(--main-red), var(--main-red) 10px, #111 10px, #111 20px);
-    transform: translateY(-50%) rotate(-3deg);
-    box-shadow: 0 0 15px rgba(255, 0, 60, 0.6);
-    z-index: 10;
-    opacity: 0.9;
+body.error-mode .links a .cmd-text {
+    color: var(--main-red);
+    text-decoration: line-through;
+    opacity: 0.5;
+    text-shadow: 0 0 5px rgba(255, 0, 60, 0.5);
 }
 
-body.error-mode .sys-hint {
-    display: none;
+body.error-mode .links a.collaboration .cmd-text {
+    color: var(--main-red); 
 }
 
 #game-ui {
@@ -423,8 +409,8 @@ body.error-mode .sys-hint {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    z-index: 100010;
+    background-color: rgba(20, 0, 5, 0.9);
+    z-index: 100030;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -433,13 +419,12 @@ body.error-mode .sys-hint {
 .system-msg-text {
     font-size: 3rem;
     letter-spacing: 5px;
-    text-shadow: 0 0 20px currentColor;
     text-align: center;
     line-height: 1.5;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--main-red) !important;
+    text-shadow: 0 0 20px var(--main-red) !important;
 }
-
-.msg-success { color: var(--main-cyan); }
-.msg-fail { color: var(--main-red); }
 
 #rpg-container {
     display: none;
@@ -452,61 +437,115 @@ body.error-mode .sys-hint {
     z-index: 100020;
 }
 
-#rpg-canvas {
-    display: block;
+#rpg-canvas { display: block; width: 100%; height: 100%; }
+
+.vignette-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    background: radial-gradient(circle at 50% 50%, transparent 10%, rgba(1, 1, 3, 0.95) 90%);
+    pointer-events: none;
+    z-index: 100021;
 }
 
 #dialog-box {
     display: none;
     position: fixed;
-    bottom: 50px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
+    transform: translate(-50%, -50%);
+    width: 70%;
     max-width: 800px;
-    height: 160px;
-    background-color: #000;
-    border: 4px solid #fff;
+    background-color: rgba(1, 1, 3, 0.95);
+    border-top: 1px solid var(--main-cyan);
+    border-bottom: 1px solid var(--main-cyan);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
     box-sizing: border-box;
-    padding: 20px 30px;
-    z-index: 100021;
-    font-family: 'Noto Sans TC', 'Share Tech Mono', monospace;
+    padding: 40px 50px;
+    z-index: 100022;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#dialog-ch {
+    font-family: 'Noto Sans TC', sans-serif;
     font-size: 1.4rem;
-    color: #fff;
+    color: #ffffff;
     line-height: 1.6;
-    white-space: pre-wrap;
+    letter-spacing: 2px;
+}
+
+#dialog-en {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: var(--main-cyan);
+    opacity: 0.8;
+    letter-spacing: 1px;
 }
 
 .interaction-hint {
     display: none;
     position: fixed;
-    top: 250px;
+    bottom: 20%;
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
     font-family: 'Share Tech Mono', monospace;
     font-size: 1.2rem;
+    letter-spacing: 2px;
     animation: blink 1s step-end infinite;
     z-index: 100021;
 }
 
-@keyframes hud-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+#move-hint {
+    position: fixed;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--main-cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    z-index: 100021;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    text-shadow: 0 0 10px var(--main-cyan);
 }
 
+#flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 100040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s ease-out;
+}
+
+#black-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 100050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+}
+
+@keyframes battlePulse { 0% { border-color: rgba(255,0,60,0.5); } 100% { border-color: rgba(255,0,60,1); } }
 @keyframes bullet-spin-right { 100% { transform: rotate(360deg); } }
 @keyframes bullet-spin-left { 100% { transform: rotate(-360deg); } }
-
-@keyframes pulse-danger { 
-    from { transform: scale(0.9); } 
-    to { transform: scale(1.1); } 
-}
-
+@keyframes pulse-danger { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+@keyframes hud-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes blink { 50% { opacity: 0; } }
-
 @keyframes intenseGlitch {
     0% { transform: translate(0, 0) skew(0deg); }
     20% { transform: translate(-2px, 2px) skew(-1deg); }
@@ -515,38 +554,27 @@ body.error-mode .sys-hint {
     80% { transform: translate(2px, 2px) skew(1deg); }
     100% { transform: translate(0, 0) skew(0deg); }
 }
-
-@keyframes battlePulse {
-    from { transform: scale(1); box-shadow: 0 0 10px rgba(255, 0, 60, 0.4) inset, 0 0 10px rgba(255, 0, 60, 0.4); }
-    to { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 0, 60, 0.8) inset, 0 0 25px rgba(255, 0, 60, 0.8); }
-}
-
-body.hit-flash {
-    background-color: rgba(255, 0, 60, 0.5);
-}
+body.hit-flash { background-color: rgba(255, 0, 60, 0.4); }
 </style>
 </head>
 <body>
 
-<div id="boot-screen">
-    <span>[ INITIALIZE SYSTEM ]</span>
-</div>
+<div id="boot-screen"><span id="boot-text">[ INITIALIZE SYSTEM ]</span></div>
 
 <audio id="bgm" loop src="A.mp3"></audio>
 <audio id="battle-bgm" loop src="B.mp3"></audio>
+<audio id="rpg-bgm" loop src="C.mp3"></audio>
 
 <div class="cursor-glow"></div>
 <div class="cursor-dot"></div>
 <div class="cursor-outline"></div>
 
-<div class="sys-hint" id="sys-hint"></div>
+<div class="sys-hint" id="sys-hint">[SYS.LOG]</div>
 
 <canvas id="matrix-canvas"></canvas>
 
 <div class="main-wrapper" id="main-wrapper">
-    <h1>
-        <span id="h1-text"></span><span id="h1-cursor" class="cmd-cursor"></span>
-    </h1>
+    <h1 id="main-title"><span id="h1-text"></span><span id="h1-cursor" class="cmd-cursor"></span></h1>
 
     <div id="battle-btn-container">
         <button class="battle-btn" id="start-battle-btn">[ INITIATE BATTLE ]</button>
@@ -579,8 +607,17 @@ body.hit-flash {
 <div id="game-ui">
     <div class="game-hud-text" id="game-timer">SURVIVE: 20s</div>
     <div class="game-hud-text">INTEGRITY</div>
-    <div class="hp-bar-container">
-        <div class="hp-bar-fill" id="hp-bar"></div>
+    <div class="hp-bar-container"><div class="hp-bar-fill" id="hp-bar"></div></div>
+</div>
+
+<div id="rpg-container">
+    <canvas id="rpg-canvas"></canvas>
+    <div class="vignette-overlay" id="vignette" style="display:none;"></div>
+    <div id="move-hint"></div>
+    <div class="interaction-hint" id="interaction-hint">[ PRESS Z TO INTERACT ]</div>
+    <div id="dialog-box">
+        <div id="dialog-ch"></div>
+        <div id="dialog-en"></div>
     </div>
 </div>
 
@@ -588,19 +625,15 @@ body.hit-flash {
     <div class="system-msg-text" id="msg-text"></div>
 </div>
 
-<div id="rpg-container">
-    <canvas id="rpg-canvas"></canvas>
-    <div class="interaction-hint" id="interaction-hint">[PRESS Z TO INTERACT]</div>
-    <div id="dialog-box">
-        <span id="dialog-text"></span>
-    </div>
-</div>
+<div id="flash-overlay"></div>
+<div id="black-overlay"></div>
 
 <script>
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     const h1El = document.getElementById('h1-text');
     const h1Cursor = document.getElementById('h1-cursor');
+    const mainWrapper = document.getElementById('main-wrapper');
     const links = document.querySelectorAll('.links a');
     const cmdTexts = document.querySelectorAll('.cmd-text');
     const cmdCursors = document.querySelectorAll('.cmd-cursor');
@@ -608,38 +641,54 @@ body.hit-flash {
     const cursorOutline = document.querySelector('.cursor-outline');
     const cursorGlow = document.querySelector('.cursor-glow');
     const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    const sysHint = document.getElementById('sys-hint');
     const bgm = document.getElementById('bgm');
     const battleBgm = document.getElementById('battle-bgm');
-    const sysHint = document.getElementById('sys-hint');
-    const battleBtnContainer = document.getElementById('battle-btn-container');
-    const startBattleBtn = document.getElementById('start-battle-btn');
-    const linksContainer = document.getElementById('links-container');
-    
-    let activeKeys = {};
-    window.addEventListener('keydown', e => { activeKeys[e.key.toLowerCase()] = true; activeKeys[e.key] = true; });
-    window.addEventListener('keyup', e => { activeKeys[e.key.toLowerCase()] = false; activeKeys[e.key] = false; });
+    const rpgBgm = document.getElementById('rpg-bgm');
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let outlineX = mouseX;
-    let outlineY = mouseY;
+    const startBattleBtn = document.getElementById('start-battle-btn');
+    
+    const gameUI = document.getElementById('game-ui');
+    const gameTimerEl = document.getElementById('game-timer');
+    const hpBar = document.getElementById('hp-bar');
+    const msgOverlay = document.getElementById('msg-overlay');
+    const msgText = document.getElementById('msg-text');
+    const flashOverlay = document.getElementById('flash-overlay');
+    const blackOverlay = document.getElementById('black-overlay');
+
+    const rpgContainer = document.getElementById('rpg-container');
+    const rpgCanvas = document.getElementById('rpg-canvas');
+    const rpgCtx = rpgCanvas.getContext('2d');
+    const moveHint = document.getElementById('move-hint');
+    const vignette = document.getElementById('vignette');
+    const dialogBox = document.getElementById('dialog-box');
+    const dialogCh = document.getElementById('dialog-ch');
+    const dialogEn = document.getElementById('dialog-en');
+    const interactHint = document.getElementById('interaction-hint');
+
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let outlineX = mouseX, outlineY = mouseY;
+    let activeKeys = {};
+    let hp = 100;
+
+    let inBulletHell = false;
+    let inDefrag = false;
+    let inRPG = false;
+
+    window.addEventListener('keydown', e => { activeKeys[e.key.toLowerCase()] = true; });
+    window.addEventListener('keyup', e => { activeKeys[e.key.toLowerCase()] = false; });
 
     window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursorDot.style.left = mouseX + 'px';
-        cursorDot.style.top = mouseY + 'px';
-        cursorGlow.style.left = mouseX + 'px';
-        cursorGlow.style.top = mouseY + 'px';
+        mouseX = e.clientX; mouseY = e.clientY;
+        cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px';
+        cursorGlow.style.left = mouseX + 'px'; cursorGlow.style.top = mouseY + 'px';
     });
 
     function animateCursor() {
-        let distX = mouseX - outlineX;
-        let distY = mouseY - outlineY;
-        outlineX += distX * 0.15;
-        outlineY += distY * 0.15;
-        cursorOutline.style.left = outlineX + 'px';
-        cursorOutline.style.top = outlineY + 'px';
+        outlineX += (mouseX - outlineX) * 0.15;
+        outlineY += (mouseY - outlineY) * 0.15;
+        cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px';
         requestAnimationFrame(animateCursor);
     }
     animateCursor();
@@ -678,115 +727,60 @@ body.hit-flash {
 
     let hintInterval;
     sysHint.addEventListener('mouseenter', () => {
-        sysHint.innerHTML = '';
+        clearInterval(hintInterval);
+        sysHint.innerText = '';
         const secret = 'SEQ: ↑ ↑ ↓ ↓ ← → ← → B A';
         let i = 0;
         hintInterval = setInterval(() => {
-            if(i < secret.length) {
-                sysHint.innerHTML += secret.charAt(i);
-                i++;
-            } else {
-                clearInterval(hintInterval);
-            }
+            if(i < secret.length) { sysHint.innerText += secret.charAt(i); i++; } 
+            else { clearInterval(hintInterval); }
         }, 50);
         setCursorState('hover-normal');
     });
 
     sysHint.addEventListener('mouseleave', () => {
         clearInterval(hintInterval);
-        sysHint.innerHTML = '';
+        sysHint.innerText = '[SYS.LOG]';
         setCursorState('');
     });
 
     function fadeAudio(audioOut, audioIn) {
         let outVol = audioOut ? audioOut.volume : 0;
         let inVol = 0;
-        
-        if (audioIn) {
-            audioIn.volume = 0;
-            audioIn.play().catch(e => console.log(e));
-        }
-
+        if (audioIn) { audioIn.volume = 0; audioIn.play().catch(e=>{}); }
         const fadeTimer = setInterval(() => {
-            let doneOut = true;
-            let doneIn = true;
-
-            if (audioOut && outVol > 0.05) {
-                outVol -= 0.05;
-                audioOut.volume = outVol;
-                doneOut = false;
-            } else if (audioOut) {
-                audioOut.pause();
-                audioOut.volume = 1;
-            }
-
-            if (audioIn && inVol < 0.95) {
-                inVol += 0.05;
-                audioIn.volume = inVol;
-                doneIn = false;
-            } else if (audioIn) {
-                audioIn.volume = 1;
-            }
-
-            if (doneOut && doneIn) {
-                clearInterval(fadeTimer);
-            }
+            let doneOut = true; let doneIn = true;
+            if (audioOut && outVol > 0.05) { outVol -= 0.05; audioOut.volume = outVol; doneOut = false; } 
+            else if (audioOut) { audioOut.pause(); audioOut.volume = 1; }
+            if (audioIn && inVol < 0.95) { inVol += 0.05; audioIn.volume = inVol; doneIn = false; } 
+            else if (audioIn) { audioIn.volume = 1; }
+            if (doneOut && doneIn) clearInterval(fadeTimer);
         }, 50);
     }
 
-    window.addEventListener('beforeunload', (e) => {
-        if (document.body.classList.contains('error-mode')) {
-            e.preventDefault();
-            e.returnValue = ''; 
-        }
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement && document.body.classList.contains('error-mode')) {
-            takeDamage(9999, 'ESCAPE DETECTED\nTERMINATED');
-        }
-    });
-
-    bootScreen.addEventListener('mouseenter', () => setCursorState('hover-normal'));
-    bootScreen.addEventListener('mouseleave', () => setCursorState(''));
-
     bootScreen.addEventListener('click', () => {
-        bgm.volume = 1;
-        bgm.play().catch(e => console.log("Audio play failed"));
+        bgm.play().catch(e=>{});
         bootScreen.style.opacity = '0';
         setCursorState('');
-        setTimeout(() => {
-            bootScreen.style.display = 'none';
-            initTypewriter();
-        }, 500);
+        setTimeout(() => { bootScreen.style.display = 'none'; initTypewriter(); }, 500);
     });
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const defaultAlphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const errorAlphabet = 'ERROR404!';
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const defaultAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let currentAlphabet = defaultAlphabet;
-
     const fontSize = 16;
     const columns = canvas.width / fontSize;
     const drops = [];
-    for (let x = 0; x < columns; x++) { drops[x] = 1; }
-
+    for (let x = 0; x < columns; x++) drops[x] = 1;
     let rainColor = '#00f3ff';
 
     function draw() {
         ctx.fillStyle = 'rgba(1, 1, 3, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = rainColor; 
-        ctx.font = fontSize + 'px monospace';
-
+        ctx.fillStyle = rainColor; ctx.font = fontSize + 'px monospace';
         for (let i = 0; i < drops.length; i++) {
-            const text = currentAlphabet.charAt(Math.floor(Math.random() * currentAlphabet.length));
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
+            ctx.fillText(currentAlphabet.charAt(Math.floor(Math.random() * currentAlphabet.length)), i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         }
     }
@@ -814,12 +808,8 @@ body.hit-flash {
     const h1TextContent = 'Wsido Xrtp ECHO';
     
     function initTypewriter() {
-        links.forEach(link => { 
-            link.style.opacity = '0'; 
-            link.style.transform = 'scale(0.98)';
-        });
+        links.forEach(link => { link.style.opacity = '0'; link.style.transform = 'scale(0.98)'; });
         cmdTexts.forEach(el => el.innerHTML = '');
-
         setTimeout(() => {
             h1Cursor.style.display = 'inline-block';
             typeText(h1El, h1TextContent, () => {
@@ -831,11 +821,9 @@ body.hit-flash {
                         const textEl = cmdTexts[currentLinkIndex];
                         const cursorEl = cmdCursors[currentLinkIndex + 1];
                         const textToType = textEl.getAttribute('data-text');
-
                         link.style.opacity = '1';
                         link.style.transform = 'scale(1)';
                         cursorEl.style.display = 'inline-block';
-
                         typeText(textEl, textToType, () => {
                             cursorEl.style.display = 'none';
                             currentLinkIndex++;
@@ -848,19 +836,22 @@ body.hit-flash {
         }, 500);
     }
 
-    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    const konamiCode = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
     let konamiIndex = 0;
 
     window.addEventListener('keydown', (e) => {
-        if (!document.body.classList.contains('error-mode') && document.getElementById('rpg-container').style.display !== 'block') {
-            if (e.key === konamiCode[konamiIndex]) {
+        if (inBulletHell || inDefrag || inRPG) return; 
+
+        if (!document.body.classList.contains('error-mode')) {
+            const key = e.key.toLowerCase();
+            if (key === konamiCode[konamiIndex]) {
                 konamiIndex++;
                 if (konamiIndex === konamiCode.length) {
                     triggerErrorMode();
                     konamiIndex = 0;
                 }
             } else {
-                konamiIndex = 0;
+                konamiIndex = (key === konamiCode[0]) ? 1 : 0;
             }
         }
     });
@@ -870,59 +861,52 @@ body.hit-flash {
         fadeAudio(bgm, battleBgm);
         document.body.classList.add('error-mode');
         rainColor = '#ff003c'; 
-        currentAlphabet = errorAlphabet;
+        currentAlphabet = 'ERROR404!';
         cursorDot.style.backgroundColor = 'var(--main-red)';
         setCursorState('');
         cursorGlow.style.background = 'radial-gradient(circle, rgba(255, 0, 60, 0.15) 0%, transparent 60%)';
         h1El.innerHTML = 'FATAL SYSTEM OVERRIDE';
-        battleBtnContainer.style.display = 'block';
     }
 
     startBattleBtn.addEventListener('click', () => {
+        mainWrapper.style.display = 'none'; 
+        
+        battleBgm.volume = 1;
+        battleBgm.play().catch(e=>{});
+        
         setCursorState('game-mode');
-        startGame();
+        startBulletHell();
     });
 
-    const mainWrapper = document.getElementById('main-wrapper');
-    const gameUI = document.getElementById('game-ui');
-    const hpBar = document.getElementById('hp-bar');
-    const gameTimerEl = document.getElementById('game-timer');
-    const msgOverlay = document.getElementById('msg-overlay');
-    const msgText = document.getElementById('msg-text');
-    
-    let isGaming = false;
-    let hp = 100;
-    let timeLeft = 20;
-    let gameLoopId;
-    let timerId;
-    let randomBulletId;
-    let sniperBulletId;
-    let ringBulletId;
+    let bhLoopId, bhTimerId;
+    let bhRandomId, bhSniperId, bhRingId;
     let projectiles = [];
-
-    let prevX = mouseX;
-    let prevY = mouseY;
+    let prevX = mouseX, prevY = mouseY;
     let idleTime = 0;
+    let bhTimeLeft = 20;
 
-    function startGame() {
-        isGaming = true;
+    function startBulletHell() {
+        inBulletHell = true;
         hp = 100;
-        timeLeft = 20;
+        bhTimeLeft = 20;
         projectiles = [];
         idleTime = 0;
         hpBar.style.width = '100%';
-        gameTimerEl.innerText = `SURVIVE: ${timeLeft}s`;
+        gameTimerEl.innerText = `SURVIVE: ${bhTimeLeft}s`;
         
-        battleBtnContainer.style.display = 'none';
-        linksContainer.style.display = 'none';
         gameUI.style.display = 'flex';
         
-        randomBulletId = setInterval(spawnRandomBullet, 150);
-        sniperBulletId = setInterval(() => spawnSniperBullet(false), 1200);
-        ringBulletId = setInterval(spawnBulletRing, 4500);
+        bhRandomId = setInterval(spawnRandomBullet, 150);
+        bhSniperId = setInterval(() => spawnSniperBullet(false), 1200);
+        bhRingId = setInterval(spawnBulletRing, 4500);
         
-        timerId = setInterval(updateTimer, 1000);
-        gameLoopId = requestAnimationFrame(gameLoop);
+        bhTimerId = setInterval(() => {
+            bhTimeLeft--;
+            gameTimerEl.innerText = `SURVIVE: ${bhTimeLeft}s`;
+            if (bhTimeLeft <= 0) endBulletHell(true);
+        }, 1000);
+        
+        bhLoopId = requestAnimationFrame(bulletLoop);
     }
 
     function createBullet(x, y, vx, vy, size, dmg, typeClass) {
@@ -935,299 +919,527 @@ body.hit-flash {
     }
 
     function spawnRandomBullet() {
-        if(!isGaming) return;
-        const size = 15;
+        if (!inBulletHell) return;
         let startX, startY;
         const side = Math.floor(Math.random() * 4);
         if (side === 0) { startX = Math.random() * window.innerWidth; startY = -50; }
         else if (side === 1) { startX = window.innerWidth + 50; startY = Math.random() * window.innerHeight; }
         else if (side === 2) { startX = Math.random() * window.innerWidth; startY = window.innerHeight + 50; }
         else { startX = -50; startY = Math.random() * window.innerHeight; }
-        let angle = Math.atan2(mouseY - startY, mouseX - startX);
-        angle += (Math.random() - 0.5) * 1.2;
+        let angle = Math.atan2(mouseY - startY, mouseX - startX) + (Math.random() - 0.5) * 1.2;
         const speed = Math.random() * 4 + 6;
-        const vx = Math.cos(angle) * speed;
-        const vy = Math.sin(angle) * speed;
-        createBullet(startX, startY, vx, vy, size, 15, 'bullet-basic');
+        createBullet(startX, startY, Math.cos(angle) * speed, Math.sin(angle) * speed, 15, 15, 'bullet-basic');
     }
 
     function spawnSniperBullet(isAfk) {
-        if(!isGaming) return;
+        if (!inBulletHell) return;
         const size = isAfk ? 35 : 28;
-        let startX, startY;
-        if(Math.random() > 0.5) {
-            startX = Math.random() > 0.5 ? -50 : window.innerWidth + 50;
-            startY = Math.random() * window.innerHeight;
-        } else {
-            startX = Math.random() * window.innerWidth;
-            startY = Math.random() > 0.5 ? -50 : window.innerHeight + 50;
-        }
+        let startX = Math.random() > 0.5 ? (Math.random() > 0.5 ? -50 : window.innerWidth + 50) : Math.random() * window.innerWidth;
+        let startY = startX < 0 || startX > window.innerWidth ? Math.random() * window.innerHeight : (Math.random() > 0.5 ? -50 : window.innerHeight + 50);
         let angle = Math.atan2(mouseY - startY, mouseX - startX);
         const speed = isAfk ? 18 : 12;
-        const vx = Math.cos(angle) * speed;
-        const vy = Math.sin(angle) * speed;
-        createBullet(startX, startY, vx, vy, size, isAfk ? 30 : 25, 'bullet-sniper');
+        createBullet(startX, startY, Math.cos(angle) * speed, Math.sin(angle) * speed, size, isAfk ? 30 : 25, 'bullet-sniper');
     }
 
     function spawnBulletRing() {
-        if(!isGaming) return;
-        const numBullets = 20;
-        const targetX = mouseX;
-        const targetY = mouseY;
+        if (!inBulletHell) return;
         const radius = 800;
-        for(let i=0; i<numBullets; i++) {
-            const angle = (i / numBullets) * Math.PI * 2;
-            const startX = targetX + Math.cos(angle) * radius;
-            const startY = targetY + Math.sin(angle) * radius;
-            const speed = 8;
-            const vx = -Math.cos(angle) * speed;
-            const vy = -Math.sin(angle) * speed;
-            createBullet(startX, startY, vx, vy, 20, 25, 'bullet-ring');
+        for(let i=0; i<20; i++) {
+            const angle = (i / 20) * Math.PI * 2;
+            createBullet(mouseX + Math.cos(angle) * radius, mouseY + Math.sin(angle) * radius, -Math.cos(angle) * 8, -Math.sin(angle) * 8, 20, 25, 'bullet-ring');
         }
     }
 
     function getDistToSegment(px, py, x1, y1, x2, y2) {
         let l2 = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1);
         if (l2 === 0) return Math.sqrt((px - x1)*(px - x1) + (py - y1)*(py - y1));
-        let t = ((px - x1)*(x2 - x1) + (py - y1)*(y2 - y1)) / l2;
-        t = Math.max(0, Math.min(1, t));
-        let projX = x1 + t * (x2 - x1);
-        let projY = y1 + t * (y2 - y1);
-        return Math.sqrt((px - projX)*(px - projX) + (py - projY)*(py - projY));
+        let t = Math.max(0, Math.min(1, ((px - x1)*(x2 - x1) + (py - y1)*(y2 - y1)) / l2));
+        return Math.sqrt((px - (x1 + t * (x2 - x1)))*(px - (x1 + t * (x2 - x1))) + (py - (y1 + t * (y2 - y1)))*(py - (y1 + t * (y2 - y1))));
     }
 
-    function gameLoop() {
-        if (!isGaming) return;
-        if (Math.abs(mouseX - prevX) < 3 && Math.abs(mouseY - prevY) < 3) {
-            idleTime++;
-        } else {
-            idleTime = 0;
-        }
-        if (idleTime > 60 && idleTime % 10 === 0) {
-            spawnSniperBullet(true); 
-        }
+    function bulletLoop() {
+        if (!inBulletHell) return;
+        if (Math.abs(mouseX - prevX) < 3 && Math.abs(mouseY - prevY) < 3) idleTime++; else idleTime = 0;
+        if (idleTime > 60 && idleTime % 10 === 0) spawnSniperBullet(true); 
+        
         for (let i = projectiles.length - 1; i >= 0; i--) {
             let p = projectiles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.el.style.left = p.x + 'px';
-            p.el.style.top = p.y + 'px';
+            p.x += p.vx; p.y += p.vy;
+            p.el.style.left = p.x + 'px'; p.el.style.top = p.y + 'px';
             if (p.x < -100 || p.x > window.innerWidth + 100 || p.y < -100 || p.y > window.innerHeight + 100) {
-                p.el.remove();
-                projectiles.splice(i, 1);
-                continue;
+                p.el.remove(); projectiles.splice(i, 1); continue;
             }
-            let dist = getDistToSegment(p.x + p.size/2, p.y + p.size/2, prevX, prevY, mouseX, mouseY);
-            if (dist < p.size/2 + 3) {
-                p.el.remove();
-                projectiles.splice(i, 1);
-                takeDamage(p.dmg);
+            if (getDistToSegment(p.x + p.size/2, p.y + p.size/2, prevX, prevY, mouseX, mouseY) < p.size/2 + 3) {
+                p.el.remove(); projectiles.splice(i, 1); takeDamage(p.dmg);
             }
         }
-        prevX = mouseX;
-        prevY = mouseY;
-        gameLoopId = requestAnimationFrame(gameLoop);
+        prevX = mouseX; prevY = mouseY;
+        bhLoopId = requestAnimationFrame(bulletLoop);
     }
 
-    function takeDamage(amount, customMsg) {
-        if (!isGaming) return;
+    function takeDamage(amount) {
+        if (!inBulletHell && !inDefrag) return;
         hp -= amount;
         hpBar.style.width = Math.max(0, hp) + '%';
         document.body.classList.add('hit-flash');
         setTimeout(() => document.body.classList.remove('hit-flash'), 100);
         if (hp <= 0) {
-            endGame(false, customMsg);
+            if (inDefrag) endDefrag(false);
+            else if (inBulletHell) endBulletHell(false);
         }
     }
 
-    function updateTimer() {
-        timeLeft--;
-        gameTimerEl.innerText = `SURVIVE: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-            endGame(true);
-        }
-    }
-
-    function endGame(win, customMsg) {
-        isGaming = false;
-        clearInterval(randomBulletId);
-        clearInterval(sniperBulletId);
-        clearInterval(ringBulletId);
-        clearInterval(timerId);
-        cancelAnimationFrame(gameLoopId);
+    function endBulletHell(win) {
+        if (!inBulletHell) return;
+        inBulletHell = false;
+        clearInterval(bhRandomId); clearInterval(bhSniperId); clearInterval(bhRingId); clearInterval(bhTimerId);
+        cancelAnimationFrame(bhLoopId);
+        projectiles.forEach(p => p.el.remove()); projectiles = [];
         
-        projectiles.forEach(p => p.el.remove());
-        projectiles = [];
-        gameUI.style.display = 'none';
-        
-        msgOverlay.style.display = 'flex';
-        msgText.className = 'system-msg-text ' + (win ? 'msg-success' : 'msg-fail');
-        msgText.innerText = win ? 'BREACH SUCCESSFUL' : (customMsg || 'YOU DIED\nPRESS BATTLE TO RETRY');
-        
-        setTimeout(() => {
-            msgOverlay.style.display = 'none';
+        if (win) {
+            msgOverlay.style.display = 'flex';
+            msgText.innerText = 'BREACH SUCCESSFUL\nINITIATING DEFRAG...';
+            setTimeout(() => {
+                msgOverlay.style.display = 'none';
+                flashOverlay.style.transition = 'none';
+                flashOverlay.style.opacity = '1';
+                setTimeout(() => {
+                    flashOverlay.style.transition = 'opacity 1s ease-out';
+                    flashOverlay.style.opacity = '0';
+                    startDefrag();
+                }, 100);
+            }, 3000);
+        } else {
+            msgOverlay.style.display = 'flex';
+            msgText.innerText = 'YOU DIED\n[ ENTER ] TO RETRY';
             setCursorState('');
-
-            if (win) {
-                fadeAudio(battleBgm, bgm);
-                startRPG();
-            } else {
-                hpBar.style.width = '100%';
-                battleBtnContainer.style.display = 'block';
-                linksContainer.style.display = 'flex'; 
-            }
-        }, 3000);
+            
+            const retryHandler = (e) => {
+                if (e.key.toLowerCase() === 'enter') {
+                    window.removeEventListener('keydown', retryHandler);
+                    msgOverlay.style.display = 'none';
+                    setCursorState('game-mode');
+                    startBulletHell();
+                }
+            };
+            window.addEventListener('keydown', retryHandler);
+        }
     }
 
-    const rpgContainer = document.getElementById('rpg-container');
-    const rpgCanvas = document.getElementById('rpg-canvas');
-    const rpgCtx = rpgCanvas.getContext('2d');
-    const dialogBox = document.getElementById('dialog-box');
-    const dialogText = document.getElementById('dialog-text');
-    const interactHint = document.getElementById('interaction-hint');
+    let dfLoopId, dfMainTimerId, dfSpawnTimerId;
+    let dfTimeLeft = 15;
+    const gridCols = 12, gridRows = 8;
+    let cellSize, offsetX, offsetY;
+    let pX, pY, pSize;
+    let zones = []; 
+    let shakeOffset = 0;
 
-    let inRpg = false;
+    function initDimensions() {
+        rpgCanvas.width = window.innerWidth;
+        rpgCanvas.height = window.innerHeight;
+        cellSize = Math.floor(Math.min(window.innerWidth * 0.9 / gridCols, window.innerHeight * 0.8 / gridRows));
+        offsetX = (window.innerWidth - gridCols * cellSize) / 2;
+        offsetY = (window.innerHeight - gridRows * cellSize) / 2;
+        pSize = cellSize * 0.4;
+    }
+
+    function startDefrag() {
+        inDefrag = true;
+        rpgContainer.style.display = 'block';
+        vignette.style.display = 'none';
+        initDimensions();
+        
+        pX = offsetX + (gridCols * cellSize) / 2;
+        pY = offsetY + (gridRows * cellSize) / 2;
+        hp = 100;
+        hpBar.style.width = '100%';
+        dfTimeLeft = 15;
+        zones = [];
+        
+        gameUI.style.display = 'flex';
+        gameTimerEl.innerText = `DEFRAG: ${dfTimeLeft}s`;
+        
+        document.body.style.cursor = 'none';
+        cursorDot.style.display = 'none';
+        cursorOutline.style.display = 'none';
+
+        moveHint.innerText = '[ W A S D ] TO SURVIVE';
+        moveHint.style.bottom = '5%';
+        moveHint.style.color = 'var(--main-cyan)';
+        moveHint.style.opacity = '1';
+        setTimeout(() => { moveHint.style.opacity = '0'; }, 3000);
+
+        dfMainTimerId = setInterval(() => {
+            dfTimeLeft--;
+            gameTimerEl.innerText = `DEFRAG: ${dfTimeLeft}s`;
+            if (dfTimeLeft <= 0) endDefrag(true);
+        }, 1000);
+
+        spawnWave();
+        dfLoopId = requestAnimationFrame(defragLoop);
+    }
+
+    function spawnWave() {
+        if (!inDefrag) return;
+        let progress = 1 - (dfTimeLeft / 15); 
+        let warningTime = Math.max(500, 1000 - progress * 500); 
+        let dangerTime = 400 + progress * 200; 
+        let spawnDelay = Math.max(400, 1000 - progress * 600); 
+        
+        let typeRoll = Math.random();
+        let newZones = [];
+        
+        if (typeRoll < 0.3 && progress > 0.2) {
+            let isRow = Math.random() > 0.5;
+            if (isRow) {
+                let numRows = Math.floor(2 + progress * 2); 
+                let rows = [];
+                while(rows.length < numRows) {
+                    let r = Math.floor(Math.random() * gridRows);
+                    if(!rows.includes(r)) rows.push(r);
+                }
+                rows.forEach(r => { for(let c=0; c<gridCols; c++) newZones.push({r,c}); });
+            } else {
+                let numCols = Math.floor(2 + progress * 3); 
+                let cols = [];
+                while(cols.length < numCols) {
+                    let c = Math.floor(Math.random() * gridCols);
+                    if(!cols.includes(c)) cols.push(c);
+                }
+                cols.forEach(c => { for(let r=0; r<gridRows; r++) newZones.push({r,c}); });
+            }
+        } else {
+            let numCells = Math.floor(10 + progress * 30); 
+            let pool = [];
+            for(let r=0; r<gridRows; r++) for(let c=0; c<gridCols; c++) pool.push({r,c});
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            newZones = pool.slice(0, numCells);
+        }
+        
+        let now = Date.now();
+        newZones.forEach(pos => {
+            let exists = zones.find(z => z.r === pos.r && z.c === pos.c && z.state === 'warning');
+            if (!exists) {
+                zones.push({
+                    c: pos.c, r: pos.r,
+                    spawnTime: now,
+                    warningTime: warningTime,
+                    dangerTime: dangerTime,
+                    state: 'warning'
+                });
+            }
+        });
+
+        dfSpawnTimerId = setTimeout(spawnWave, spawnDelay);
+    }
+
+    function defragLoop() {
+        if (!inDefrag) return;
+        let now = Date.now();
+        let speed = cellSize * 0.18; 
+        
+        if (activeKeys['arrowup'] || activeKeys['w']) pY -= speed;
+        if (activeKeys['arrowdown'] || activeKeys['s']) pY += speed;
+        if (activeKeys['arrowleft'] || activeKeys['a']) pX -= speed;
+        if (activeKeys['arrowright'] || activeKeys['d']) pX += speed;
+
+        pX = Math.max(offsetX, Math.min(offsetX + gridCols * cellSize - pSize, pX));
+        pY = Math.max(offsetY, Math.min(offsetY + gridRows * cellSize - pSize, pY));
+
+        let isHitThisFrame = false;
+        let screenShake = false;
+
+        for (let i = zones.length - 1; i >= 0; i--) {
+            let z = zones[i];
+            let elapsed = now - z.spawnTime;
+            
+            if (z.state === 'warning' && elapsed > z.warningTime) {
+                z.state = 'danger';
+            } else if (z.state === 'danger' && elapsed > z.warningTime + z.dangerTime) {
+                zones.splice(i, 1);
+                continue;
+            }
+
+            if (z.state === 'danger') {
+                screenShake = true;
+                let zx = offsetX + z.c * cellSize;
+                let zy = offsetY + z.r * cellSize;
+                let pxCenter = pX + pSize/2;
+                let pyCenter = pY + pSize/2;
+                if (pxCenter > zx && pxCenter < zx + cellSize && pyCenter > zy && pyCenter < zy + cellSize) {
+                    isHitThisFrame = true;
+                }
+            }
+        }
+
+        if (isHitThisFrame) takeDamage(2.5);
+
+        shakeOffset = screenShake ? (Math.random() - 0.5) * 8 : 0;
+
+        rpgCtx.fillStyle = '#010103';
+        rpgCtx.fillRect(0, 0, rpgCanvas.width, rpgCanvas.height);
+        rpgCtx.save();
+        rpgCtx.translate(shakeOffset, shakeOffset);
+
+        rpgCtx.strokeStyle = 'rgba(0, 243, 255, 0.15)';
+        rpgCtx.lineWidth = 2;
+        for (let r = 0; r <= gridRows; r++) {
+            rpgCtx.beginPath();
+            rpgCtx.moveTo(offsetX, offsetY + r * cellSize);
+            rpgCtx.lineTo(offsetX + gridCols * cellSize, offsetY + r * cellSize);
+            rpgCtx.stroke();
+        }
+        for (let c = 0; c <= gridCols; c++) {
+            rpgCtx.beginPath();
+            rpgCtx.moveTo(offsetX + c * cellSize, offsetY);
+            rpgCtx.lineTo(offsetX + c * cellSize, offsetY + gridRows * cellSize);
+            rpgCtx.stroke();
+        }
+
+        zones.forEach(z => {
+            let zx = offsetX + z.c * cellSize;
+            let zy = offsetY + z.r * cellSize;
+            let elapsed = now - z.spawnTime;
+
+            if (z.state === 'warning') {
+                rpgCtx.fillStyle = 'rgba(255, 0, 60, 0.15)';
+                rpgCtx.fillRect(zx + 2, zy + 2, cellSize - 4, cellSize - 4);
+                let progress = elapsed / z.warningTime;
+                let margin = (cellSize / 2) * (1 - progress);
+                rpgCtx.strokeStyle = '#ff003c';
+                rpgCtx.lineWidth = 2;
+                rpgCtx.strokeRect(zx + margin, zy + margin, cellSize - margin*2, cellSize - margin*2);
+            } else if (z.state === 'danger') {
+                rpgCtx.fillStyle = '#ff003c';
+                rpgCtx.fillRect(zx, zy, cellSize, cellSize);
+                rpgCtx.fillStyle = '#fff';
+                rpgCtx.font = Math.floor(cellSize*0.35) + 'px monospace';
+                rpgCtx.textAlign = 'center';
+                rpgCtx.textBaseline = 'middle';
+                rpgCtx.fillText('!ERR', zx + cellSize/2, zy + cellSize/2);
+            }
+        });
+
+        rpgCtx.fillStyle = isHitThisFrame ? '#fff' : '#00f3ff';
+        rpgCtx.shadowBlur = 15;
+        rpgCtx.shadowColor = rpgCtx.fillStyle;
+        rpgCtx.fillRect(pX, pY, pSize, pSize);
+        rpgCtx.fillStyle = '#000';
+        rpgCtx.shadowBlur = 0;
+        rpgCtx.fillRect(pX + pSize*0.25, pY + pSize*0.25, pSize*0.5, pSize*0.5);
+
+        rpgCtx.restore();
+        dfLoopId = requestAnimationFrame(defragLoop);
+    }
+
+    function endDefrag(win) {
+        if (!inDefrag) return;
+        inDefrag = false;
+        cancelAnimationFrame(dfLoopId);
+        clearInterval(dfMainTimerId);
+        clearTimeout(dfSpawnTimerId);
+        gameUI.style.display = 'none';
+        document.body.classList.remove('hit-flash');
+        
+        if (win) {
+            flashOverlay.style.transition = 'none';
+            flashOverlay.style.opacity = '1';
+            fadeAudio(battleBgm, rpgBgm);
+            setTimeout(() => {
+                flashOverlay.style.transition = 'opacity 3s ease-out';
+                flashOverlay.style.opacity = '0';
+                startRPG();
+            }, 100);
+        } else {
+            msgOverlay.style.display = 'flex';
+            msgText.innerText = 'SECTOR CORRUPTED\n[ ENTER ] TO RETRY';
+            setCursorState('');
+            
+            const retryHandler = (e) => {
+                if (e.key.toLowerCase() === 'enter') {
+                    window.removeEventListener('keydown', retryHandler);
+                    msgOverlay.style.display = 'none';
+                    startDefrag(); 
+                }
+            };
+            window.addEventListener('keydown', retryHandler);
+        }
+    }
+
     let rpgLoopId;
-    let pX = 0, pY = 0;
-    const pSize = 32;
-    const pSpeed = 2.5;
-    const corridorWidth = 340;
-    let leftBound, rightBound;
-    let tX, tY;
-    
+    let isDialogActive = false;
     let dialogIndex = 0;
     let isTyping = false;
     let typeTimer;
     let zPressed = false;
+    const worldHeight = 3000;
+    const corridorWidth = 340;
+    let tX, tY, camY = 0;
+    let particles = [];
 
     const dialogs = [
-        "* 你竟然撐過去了...\n  You actually survived...",
-        "* 這裡是被隱藏的伺服器核心。\n  This is the hidden server core.",
-        "* 既然你通過了考驗...\n  Since you passed the trial...",
-        "* 真正的 Wsido Xrtp ECHO 權限就交給你了。\n  The true root access of Wsido Xrtp ECHO is yours.",
-        "[ 系統防火牆已解除 ]\n[ SYSTEM FIREWALL DISABLED ]"
+        { ch: "你竟然撐過去了...", en: "You actually survived..." },
+        { ch: "這裡是被隱藏的伺服器核心。", en: "This is the hidden server core." },
+        { ch: "既然你通過了考驗...", en: "Since you passed the trial..." },
+        { ch: "真正的 Wsido Xrtp ECHO 權限就交給你了。", en: "The true root access of Wsido Xrtp ECHO is yours." },
+        { ch: "[ 系統防火牆已全面解除 ]", en: "[ SYSTEM FIREWALL COMPLETELY DISABLED ]" }
     ];
 
     function startRPG() {
-        inRpg = true;
-        rpgContainer.style.display = 'block';
+        inRPG = true;
         rpgCanvas.width = window.innerWidth;
         rpgCanvas.height = window.innerHeight;
+        vignette.style.display = 'block';
+        rpgContainer.style.display = 'block';
         
-        leftBound = rpgCanvas.width / 2 - corridorWidth / 2;
-        rightBound = rpgCanvas.width / 2 + corridorWidth / 2;
+        pSize = 32;
+        tX = window.innerWidth / 2;
+        tY = 400;
+        pX = window.innerWidth / 2 - pSize / 2;
+        pY = worldHeight - 300;
+        camY = pY - window.innerHeight * 0.7;
         
-        pX = rpgCanvas.width / 2 - pSize / 2;
-        pY = rpgCanvas.height - 120;
-        
-        tX = rpgCanvas.width / 2;
-        tY = 150;
-        
+        isDialogActive = false;
         dialogIndex = 0;
+        
+        moveHint.innerText = '[ W A S D ] TO MOVE';
+        moveHint.style.bottom = '15%';
+        moveHint.style.color = 'rgba(0, 243, 255, 0.4)';
+        moveHint.style.opacity = '1';
+        
+        particles = [];
+        for(let i=0; i<80; i++) {
+            particles.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                s: Math.random() * 2 + 1,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            });
+        }
         
         document.body.style.cursor = 'none';
         cursorDot.style.display = 'none';
         cursorOutline.style.display = 'none';
         
-        rpgLoopId = requestAnimationFrame(updateRPG);
+        rpgLoopId = requestAnimationFrame(rpgLoop);
     }
 
-    function updateRPG() {
-        if (!inRpg) return;
-        
-        rpgCtx.fillStyle = '#010103';
-        rpgCtx.fillRect(0, 0, rpgCanvas.width, rpgCanvas.height);
-        
-        rpgCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-        rpgCtx.lineWidth = 1;
-        for(let i = leftBound; i <= rightBound; i+=40) {
-            rpgCtx.beginPath(); rpgCtx.moveTo(i, 0); rpgCtx.lineTo(i, rpgCanvas.height); rpgCtx.stroke();
-        }
-        for(let i = 0; i < rpgCanvas.height; i+=40) {
-            rpgCtx.beginPath(); rpgCtx.moveTo(leftBound, i); rpgCtx.lineTo(rightBound, i); rpgCtx.stroke();
-        }
+    function rpgLoop() {
+        if (!inRPG) return;
 
-        let gradient = rpgCtx.createLinearGradient(0, tY - 50, 0, rpgCanvas.height);
-        gradient.addColorStop(0, 'rgba(0, 243, 255, 0.15)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        rpgCtx.fillStyle = gradient;
-        rpgCtx.fillRect(leftBound, 0, corridorWidth, rpgCanvas.height);
-
-        rpgCtx.strokeStyle = 'var(--main-cyan)';
-        rpgCtx.lineWidth = 2;
-        rpgCtx.shadowBlur = 15;
-        rpgCtx.shadowColor = 'var(--main-cyan)';
-        rpgCtx.beginPath();
-        rpgCtx.moveTo(leftBound, 0); rpgCtx.lineTo(leftBound, rpgCanvas.height);
-        rpgCtx.moveTo(rightBound, 0); rpgCtx.lineTo(rightBound, rpgCanvas.height);
-        rpgCtx.stroke();
-        
-        let offset = (Date.now() / 20) % 150;
-        rpgCtx.fillStyle = 'rgba(0, 243, 255, 0.6)';
-        for (let i = 0; i < rpgCanvas.height; i += 150) {
-            let drawY = rpgCanvas.height - ((i + offset) % rpgCanvas.height);
-            if (drawY > tY) {
-                rpgCtx.beginPath();
-                rpgCtx.moveTo(rpgCanvas.width/2 - 25, drawY);
-                rpgCtx.lineTo(rpgCanvas.width/2, drawY - 20);
-                rpgCtx.lineTo(rpgCanvas.width/2 + 25, drawY);
-                rpgCtx.lineTo(rpgCanvas.width/2, drawY - 8);
-                rpgCtx.fill();
-            }
-        }
-        rpgCtx.shadowBlur = 0;
-
-        rpgCtx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-        rpgCtx.fillRect(0, 0, leftBound, rpgCanvas.height);
-        rpgCtx.fillRect(rightBound, 0, rpgCanvas.width - rightBound, rpgCanvas.height);
-
-        if (dialogBox.style.display !== 'block') {
+        if (!isDialogActive) {
+            let pSpeed = 2.5;
             if (activeKeys['arrowup'] || activeKeys['w']) pY -= pSpeed;
             if (activeKeys['arrowdown'] || activeKeys['s']) pY += pSpeed;
             if (activeKeys['arrowleft'] || activeKeys['a']) pX -= pSpeed;
             if (activeKeys['arrowright'] || activeKeys['d']) pX += pSpeed;
         }
 
+        if (pY < worldHeight - 350) moveHint.style.opacity = '0';
+
+        let leftBound = window.innerWidth / 2 - corridorWidth / 2;
+        let rightBound = window.innerWidth / 2 + corridorWidth / 2;
         pX = Math.max(leftBound + 10, Math.min(rightBound - pSize - 10, pX));
-        pY = Math.max(tY, Math.min(rpgCanvas.height - pSize - 20, pY));
+        pY = Math.max(tY + 40, Math.min(worldHeight - pSize - 50, pY));
+
+        let targetCamY = pY - window.innerHeight * 0.75;
+        camY += (targetCamY - camY) * 0.1;
+        camY = Math.max(0, Math.min(worldHeight - window.innerHeight, camY));
+
+        rpgCtx.fillStyle = '#010103';
+        rpgCtx.fillRect(0, 0, rpgCanvas.width, rpgCanvas.height);
+        rpgCtx.save();
+        rpgCtx.translate(0, -camY);
+
+        rpgCtx.strokeStyle = 'rgba(0, 243, 255, 0.05)';
+        rpgCtx.lineWidth = 1;
+        let gridStart = Math.floor(camY / 40) * 40;
+        for(let i = leftBound; i <= rightBound; i+=40) {
+            rpgCtx.beginPath(); rpgCtx.moveTo(i, camY); rpgCtx.lineTo(i, camY + window.innerHeight); rpgCtx.stroke();
+        }
+        for(let i = gridStart; i < camY + window.innerHeight; i+=40) {
+            rpgCtx.beginPath(); rpgCtx.moveTo(leftBound, i); rpgCtx.lineTo(rightBound, i); rpgCtx.stroke();
+        }
+
+        rpgCtx.strokeStyle = '#00f3ff';
+        rpgCtx.lineWidth = 2;
+        rpgCtx.shadowBlur = 10;
+        rpgCtx.shadowColor = '#00f3ff';
+        rpgCtx.beginPath();
+        rpgCtx.moveTo(leftBound, 0); rpgCtx.lineTo(leftBound, worldHeight);
+        rpgCtx.moveTo(rightBound, 0); rpgCtx.lineTo(rightBound, worldHeight);
+        rpgCtx.stroke();
+        rpgCtx.shadowBlur = 0;
+
+        let pulseOffset = (Date.now() / 15) % worldHeight;
+        for(let i=0; i<4; i++) {
+             let waveY = worldHeight - ((pulseOffset + i * 800) % worldHeight);
+             if (waveY > tY) {
+                 let grad = rpgCtx.createLinearGradient(0, waveY-100, 0, waveY+100);
+                 grad.addColorStop(0, 'rgba(0, 243, 255, 0)');
+                 grad.addColorStop(0.5, 'rgba(0, 243, 255, 0.15)');
+                 grad.addColorStop(1, 'rgba(0, 243, 255, 0)');
+                 rpgCtx.fillStyle = grad;
+                 rpgCtx.fillRect(leftBound, waveY-100, corridorWidth, 200);
+             }
+        }
+
+        let terminalGlow = rpgCtx.createRadialGradient(tX, tY, 0, tX, tY, 800);
+        terminalGlow.addColorStop(0, 'rgba(252, 238, 10, 0.25)');
+        terminalGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        rpgCtx.fillStyle = terminalGlow;
+        rpgCtx.fillRect(leftBound, camY, corridorWidth, window.innerHeight);
 
         const tSize = 40;
         rpgCtx.fillStyle = 'rgba(252, 238, 10, 0.2)';
         rpgCtx.beginPath();
-        rpgCtx.arc(tX, tY, tSize + Math.sin(Date.now() / 200) * 8, 0, Math.PI * 2);
+        rpgCtx.arc(tX, tY, tSize + Math.sin(Date.now() / 300) * 10, 0, Math.PI * 2);
         rpgCtx.fill();
-        
-        rpgCtx.fillStyle = 'var(--main-yellow)';
+        rpgCtx.fillStyle = '#fcee0a';
         rpgCtx.fillRect(tX - tSize/2, tY - tSize/2, tSize, tSize);
         rpgCtx.fillStyle = '#fff';
         rpgCtx.fillRect(tX - tSize/4, tY - tSize/4, tSize/2, tSize/2);
 
-        rpgCtx.fillStyle = 'var(--main-cyan)';
+        rpgCtx.fillStyle = '#00f3ff';
         rpgCtx.fillRect(pX, pY, pSize, pSize);
         rpgCtx.fillStyle = '#000';
         rpgCtx.fillRect(pX + 6, pY + 8, 6, 6);
         rpgCtx.fillRect(pX + 20, pY + 8, 6, 6);
 
         let dist = Math.hypot(pX + pSize/2 - tX, pY + pSize/2 - tY);
-        if (dist < 80 && dialogBox.style.display !== 'block') {
+        if (dist < 90 && !isDialogActive) {
             interactHint.style.display = 'block';
             if ((activeKeys['z'] || activeKeys['enter']) && !zPressed) {
                 zPressed = true;
+                isDialogActive = true;
                 showDialog();
             }
         } else {
             interactHint.style.display = 'none';
         }
 
-        if (!(activeKeys['z'] || activeKeys['enter'])) {
-            zPressed = false;
-        }
+        rpgCtx.restore();
 
-        if (dialogBox.style.display === 'block' && (activeKeys['z'] || activeKeys['enter']) && !zPressed) {
+        rpgCtx.fillStyle = 'rgba(0, 243, 255, 0.3)';
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < 0) p.x = window.innerWidth;
+            if(p.x > window.innerWidth) p.x = 0;
+            if(p.y < 0) p.y = window.innerHeight;
+            if(p.y > window.innerHeight) p.y = 0;
+            rpgCtx.fillRect(p.x, p.y, p.s, p.s);
+        });
+
+        if (isDialogActive && (activeKeys['z'] || activeKeys['enter']) && !zPressed) {
             zPressed = true;
             if (isTyping) {
                 clearInterval(typeTimer);
-                dialogText.textContent = dialogs[dialogIndex];
+                dialogCh.innerText = "* " + dialogs[dialogIndex].ch;
+                dialogEn.innerText = dialogs[dialogIndex].en;
                 isTyping = false;
             } else {
                 dialogIndex++;
@@ -1239,40 +1451,41 @@ body.hit-flash {
             }
         }
 
-        rpgLoopId = requestAnimationFrame(updateRPG);
+        if (!(activeKeys['z'] || activeKeys['enter'])) zPressed = false;
+
+        rpgLoopId = requestAnimationFrame(rpgLoop);
     }
 
     function showDialog() {
         interactHint.style.display = 'none';
-        dialogBox.style.display = 'block';
-        dialogText.textContent = '';
+        dialogBox.style.display = 'flex';
+        dialogCh.innerText = '';
+        dialogEn.innerText = '';
         isTyping = true;
-        let text = dialogs[dialogIndex];
-        let i = 0;
+        
+        let textCh = "* " + dialogs[dialogIndex].ch;
+        let textEn = dialogs[dialogIndex].en;
+        let i = 0, j = 0;
         
         clearInterval(typeTimer);
         typeTimer = setInterval(() => {
-            if (i < text.length) {
-                dialogText.textContent += text.charAt(i);
-                i++;
-            } else {
-                clearInterval(typeTimer);
-                isTyping = false;
-            }
-        }, 30);
+            if (i < textCh.length) { dialogCh.innerText += textCh.charAt(i); i++; } 
+            else if (j < textEn.length) { dialogEn.innerText += textEn.charAt(j); j++; } 
+            else { clearInterval(typeTimer); isTyping = false; }
+        }, 40);
     }
 
     function endRPG() {
-        inRpg = false;
+        if (!inRPG) return;
+        inRPG = false;
         cancelAnimationFrame(rpgLoopId);
         dialogBox.style.display = 'none';
-        rpgContainer.style.opacity = '0';
-        rpgContainer.style.transition = 'opacity 2s ease';
+        
+        fadeAudio(rpgBgm, null);
+        blackOverlay.style.opacity = '1';
         
         setTimeout(() => {
             rpgContainer.style.display = 'none';
-            try { document.exitFullscreen(); } catch(err) {}
-            
             document.body.style.cursor = 'none';
             cursorDot.style.display = 'block';
             cursorOutline.style.display = 'block';
@@ -1283,12 +1496,27 @@ body.hit-flash {
             cursorDot.style.backgroundColor = 'var(--main-cyan)';
             cursorGlow.style.background = 'radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, transparent 60%)';
             
+            mainWrapper.style.display = 'flex'; 
             h1El.innerHTML = '';
-            typeText(h1El, h1TextContent, () => {});
             
-            battleBtnContainer.style.display = 'none';
-            linksContainer.style.display = 'flex';
-        }, 2000);
+            bootScreen.style.opacity = '1';
+            bootScreen.style.display = 'flex';
+            bootText.innerText = '[ SYSTEM REBOOT ]';
+            
+            setTimeout(() => {
+                blackOverlay.style.opacity = '0';
+                bgm.play().catch(e=>{});
+                bgm.volume = 1;
+                
+                setTimeout(() => {
+                    bootScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        bootScreen.style.display = 'none';
+                        initTypewriter();
+                    }, 500);
+                }, 1500);
+            }, 1000);
+        }, 1500);
     }
 </script>
 
